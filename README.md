@@ -2,7 +2,7 @@
 
 A .NET (C#) REST and WebSocket helper library for the Ambient Weather API.
 
-Update of [ChaseDRedmon's Cirrus](https://github.com/ChaseDRedmon/Cirrus).
+Update of [ChaseDRedmon's Cirrus](https://github.com/ChaseDRedmon/Cirrus) library.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O31YN4SD)
 
