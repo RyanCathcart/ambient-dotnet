@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AmbientDotNet.Tests/AmbientDotNet.Tests.csproj" />
+  <Project Path="AmbientDotNet/AmbientDotNet.csproj" />
+</Solution>
