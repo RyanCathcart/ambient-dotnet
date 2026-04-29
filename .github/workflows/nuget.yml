@@ -49,4 +49,4 @@ jobs:
           user: ${{ secrets.NUGET_USER }}
 
       - name: "Push NuGet Package"
-        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIR }}\*.nupkg -k ${{steps.login.outputs.NUGET_API_KEY}} -s ${{env.NUGET_SOURCE_URL }}
+        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIR }}/*.nupkg -k ${{steps.login.outputs.NUGET_API_KEY}} -s ${{env.NUGET_SOURCE_URL }}
