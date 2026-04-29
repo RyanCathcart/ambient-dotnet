@@ -2,8 +2,6 @@ name: "Deploy to NuGet"
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
@@ -34,12 +32,14 @@ jobs:
       - name: "Build Project"
         run: dotnet build ${{ env.PROJECT_PATH }} --no-restore -c Release
 
-      - name: "Get Version"
-        id: get_version
-        uses: battila7/get-version-action@v2
+      - name: "Get Tag"
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+        with:
+          strip_v: true
 
       - name: "Pack Project"
-        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build -c Release -p:PackageVersion=${{ steps.get_version.outputs.version-without-v }} -o ${{ env.PACKAGE_OUTPUT_DIR }}
+        run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build -c Release -p:PackageVersion=${{ steps.tag.outputs.tag }} -o ${{ env.PACKAGE_OUTPUT_DIR }}
 
        # Get a short-lived NuGet API key
       - name: NuGet login (OIDC → temp API key)
