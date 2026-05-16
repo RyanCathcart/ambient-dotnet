@@ -24,7 +24,7 @@ public static class AmbientServices
         };
 
         services
-            .Configure(setupAction)
+            .Configure<AmbientConfig>(setupAction)
             .AddTransient<LoggingContext>()
             .AddScoped<Limiter>()
             .AddScoped<IAmbientRealtimeApi, AmbientRealtimeApi>()
