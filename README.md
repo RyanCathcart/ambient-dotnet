@@ -173,7 +173,7 @@ var app = builder.Build();
 Finally, inject IAmbientRealtimeApi into a class to use it:
 
 ```csharp
-public class ExampleClass(IAmbientRealtimeApi api)
+public class ExampleClass
 {
     private readonly IAmbientRealtimeApi _api;
 
@@ -182,7 +182,7 @@ public class ExampleClass(IAmbientRealtimeApi api)
         _api = api;
 
         // Define behavior when new data is received (occurs once per minute):
-        api.OnDataReceived += (sender, args) =>
+        _api.OnDataReceived += (sender, args) =>
         {
             DeviceData? deviceData = args.DeviceData;
             string deviceJson = JsonSerializer.Serialize(deviceData,
@@ -191,7 +191,13 @@ public class ExampleClass(IAmbientRealtimeApi api)
             Console.WriteLine("New data received:");
             Console.WriteLine(deviceJson);
         };
+    }
 
+    public async Task ExampleMethod()
+    {
+        // Initialize the connection to the Ambient Realtime API and starts listening for data.
+        // Note this can be done in the constructor (cannot be awaited) or anywhere else in the class, 
+        // but it only needs to be done once:
         await _api.Connect();
     }
 }
