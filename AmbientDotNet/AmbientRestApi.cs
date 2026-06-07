@@ -29,21 +29,21 @@ public sealed class AmbientRestApi : IAmbientRestApi
     /// <param name="options">Options containing MacAddress, API Key, and Application key needed for REST Requests.</param>
     /// <param name="service">HTTP Client service.</param>
     /// <param name="logger">Serilog logger.</param>
-    public AmbientRestApi(IOptions<AmbientConfig> options, IAmbientService service, ILogger<AmbientRestApi>? logger = null)
+    public AmbientRestApi(IOptionsMonitor<AmbientConfig> options, IAmbientService service, ILogger<AmbientRestApi>? logger = null)
     {
         _log = logger ?? NullLogger<AmbientRestApi>.Instance;
         _log.LogDebug("Creating REST instance");
 
-        _apiKey = options.Value.ApiKeys?.First();
-        _applicationKey = options.Value.ApplicationKey;
-        _macAddress = options.Value.MacAddress;
+        _apiKey = options.CurrentValue.ApiKeys?.FirstOrDefault();
+        _applicationKey = options.CurrentValue.ApplicationKey;
+        _macAddress = options.CurrentValue.MacAddress;
 
         _service = service;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AmbientRestApi"/> class.
-    /// This class should ONLY be used if you do not plan to add the Ambient Services in a DI container.
+    /// This class should ONLY be used if you do not plan to add the Ambient Services to a DI container.
     /// </summary>
     /// <param name="applicationKey">Ambient Weather Application key needed for REST Requests.</param>
     /// <param name="apiKey">Ambient Weather API key needed for REST Requests.</param>

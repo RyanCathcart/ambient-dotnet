@@ -16,8 +16,7 @@ public class AmbientRestApiTests
     {
         var mockAmbientService = new Mock<Api.IAmbientService>();
 
-        IEnumerable<DeviceData> expectedDeviceList = new List<DeviceData>
-                { new DeviceData { MacAddress = SampleMacAddress } };
+        IEnumerable<DeviceData>? expectedDeviceList = [new DeviceData { MacAddress = SampleMacAddress }];
 
         mockAmbientService.Setup(
             x => x.Fetch<DeviceData>(
@@ -30,7 +29,7 @@ public class AmbientRestApiTests
         ).Verifiable();
 
         using var ambientRestApi = new AmbientRestApi(
-            options: GetAmbientConfig(SampleApplicationKey, SampleMacAddress, SampleApiKey),
+            options: GetAmbientConfigMonitor(SampleApiKey, SampleMacAddress, SampleApiKey),
             service: mockAmbientService.Object
         );
 
@@ -54,7 +53,7 @@ public class AmbientRestApiTests
         var mockAmbientService = new Mock<Api.IAmbientService>();
 
         using var ambientRestApi = new AmbientRestApi(
-            options: GetAmbientConfig(SampleApplicationKey, SampleMacAddress, SampleApiKey),
+            options: GetAmbientConfigMonitor(SampleApiKey, SampleMacAddress, SampleApiKey),
             service: mockAmbientService.Object
         );
 
@@ -78,11 +77,11 @@ public class AmbientRestApiTests
                 It.IsAny<CancellationToken>()
             )
         ).ReturnsAsync(
-            ServiceResponse.Fail<IEnumerable<DeviceData>>("Error occurred!")
+            ServiceResponse.Fail<IEnumerable<DeviceData>?>("Error occurred!")
         ).Verifiable();
 
         using var ambientRestApi = new AmbientRestApi(
-            options: GetAmbientConfig(SampleApplicationKey, SampleMacAddress, SampleApiKey),
+            options: GetAmbientConfigMonitor(SampleApiKey, SampleMacAddress, SampleApiKey),
             service: mockAmbientService.Object
         );
 
@@ -103,7 +102,7 @@ public class AmbientRestApiTests
         var mockAmbientService = new Mock<Api.IAmbientService>();
 
         using var ambientRestApi = new AmbientRestApi(
-            options: GetAmbientConfig(applicationKey, macAddress, apiKey),
+            options: GetAmbientConfigMonitor(applicationKey, macAddress, apiKey),
             service: mockAmbientService.Object
         );
 
@@ -122,15 +121,13 @@ public class AmbientRestApiTests
         //);
     }
 
-    private static IOptions<AmbientConfig> GetAmbientConfig(string applicationKey, string macAddress, params string[] apiKeys)
+    private static IOptionsMonitor<AmbientConfig> GetAmbientConfigMonitor(string applicationKey, string macAddress, params string[] apiKeys)
     {
-        return Options.Create(
-            new AmbientConfig
-            {
-                ApplicationKey = applicationKey,
-                MacAddress = macAddress,
-                ApiKeys = [.. apiKeys],
-            }
+        return Mock.Of<IOptionsMonitor<AmbientConfig>>(
+            x =>
+                x.CurrentValue.MacAddress == macAddress &&
+                x.CurrentValue.ApiKeys == apiKeys.ToList() &&
+                x.CurrentValue.ApplicationKey == applicationKey
         );
     }
 }

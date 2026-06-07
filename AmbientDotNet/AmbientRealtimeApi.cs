@@ -39,13 +39,13 @@ public sealed class AmbientRealtimeApi : IAmbientRealtimeApi
     /// </summary>
     /// <param name="options">The configuration options containing Ambient service settings. Cannot be null.</param>
     /// <param name="logger">The logger to use for diagnostic messages. If null, a no-op logger is used.</param>
-    public AmbientRealtimeApi(IOptions<AmbientConfig> options, ILogger<AmbientRealtimeApi>? logger = null)
+    public AmbientRealtimeApi(IOptionsMonitor<AmbientConfig> options, ILogger<AmbientRealtimeApi>? logger = null)
     {
         _log = logger ?? NullLogger<AmbientRealtimeApi>.Instance;
         _log.LogDebug("Creating Realtime instance");
 
-        _apiKeys = options.Value.ApiKeys;
-        _applicationKey = options.Value.ApplicationKey;
+        _apiKeys = options.CurrentValue.ApiKeys;
+        _applicationKey = options.CurrentValue.ApplicationKey;
     }
 
     /// <summary>
